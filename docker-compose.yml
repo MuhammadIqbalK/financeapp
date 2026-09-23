@@ -31,7 +31,7 @@ services:
       DATABASE_URL: postgresql://${POSTGRES_USER:-admin}:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is not set — copy .env.example to .env and set it}@db:5432/${POSTGRES_DB:-financeapp}
       FRONTEND_DIR: /frontend/build
     ports:
-      - "${APP_PORT:-8002}:8002"
+      - "${APP_PORT:-8000}:8002"
     depends_on:
       db:
         condition: service_healthy

@@ -15,8 +15,9 @@ WORKDIR /app
 COPY backend/pyproject.toml backend/uv.lock backend/.python-version ./
 RUN uv sync --frozen --no-install-project
 
-COPY backend/alembic.ini backend/alembic ./
-COPY backend/app ./app
+COPY backend/alembic.ini ./
+COPY backend/alembic/ ./alembic/
+COPY backend/app/ ./app/
 
 COPY --from=frontend /build/build /frontend/build
 ENV FRONTEND_DIR=/frontend/build
