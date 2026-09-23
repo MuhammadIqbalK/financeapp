@@ -10,7 +10,7 @@ export class ApiError extends Error {
 }
 
 // Dev: talk to the local API directly. Prod: same-origin (uvicorn serves the SPA).
-export const BASE = import.meta.env.PUBLIC_API_URL ?? (import.meta.env.DEV ? 'http://127.0.0.1:8000' : '');
+export const BASE = import.meta.env.PUBLIC_API_URL ?? (import.meta.env.DEV ? 'http://127.0.0.1:8001' : '');
 
 export function getToken(): string | null {
 	if (typeof localStorage === 'undefined') return null;

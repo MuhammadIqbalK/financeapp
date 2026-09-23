@@ -7,7 +7,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is not set — copy .env.example to .env and set it}
       POSTGRES_DB: ${POSTGRES_DB:-financeapp}
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql
     ports:
       # 5441 by default so it can coexist with a local dev Postgres on 5440.
       - "${POSTGRES_PORT:-5441}:5432"
@@ -31,7 +31,7 @@ services:
       DATABASE_URL: postgresql://${POSTGRES_USER:-admin}:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is not set — copy .env.example to .env and set it}@db:5432/${POSTGRES_DB:-financeapp}
       FRONTEND_DIR: /frontend/build
     ports:
-      - "${APP_PORT:-8000}:8000"
+      - "${APP_PORT:-8001}:8001"
     depends_on:
       db:
         condition: service_healthy
