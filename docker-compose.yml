@@ -1,0 +1,40 @@
+services:
+  db:
+    image: postgres:18-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-admin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is not set — copy .env.example to .env and set it}
+      POSTGRES_DB: ${POSTGRES_DB:-financeapp}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      # 5441 by default so it can coexist with a local dev Postgres on 5440.
+      - "${POSTGRES_PORT:-5441}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-admin} -d ${POSTGRES_DB:-financeapp}"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    # App secrets (SECRET_KEY, ACCESS_TOKEN_EXPIRE_MINUTES, ...) come from backend/.env
+    env_file:
+      - ./backend/.env
+    environment:
+      # Overrides the localhost URL in backend/.env — inside compose the host is `db`.
+      # Password comes from the root .env used for interpolation; no secrets in this file.
+      DATABASE_URL: postgresql://${POSTGRES_USER:-admin}:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is not set — copy .env.example to .env and set it}@db:5432/${POSTGRES_DB:-financeapp}
+      FRONTEND_DIR: /frontend/build
+    ports:
+      - "${APP_PORT:-8000}:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  pgdata:

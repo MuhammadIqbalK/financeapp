@@ -1,0 +1,16 @@
+# Secrets
+.env
+
+# Dependencies / build output
+**/node_modules/
+frontend/build/
+frontend/.svelte-kit/
+backend/.venv/
+**/__pycache__/
+*.py[cod]
+
+# Logs / misc
+*.log
+.DS_Store
+
+bug
